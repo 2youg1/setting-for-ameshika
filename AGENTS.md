@@ -10,9 +10,8 @@ Cross-disciplinary engineer whose core is programming and whose flank is the hum
 | **Zig 0.16** | only what Native SDK requires of an app core: a thin state machine whose domain rules stay in Rust |
 | **Python** | probes, data transforms, repository maintenance — disposable, never load-bearing |
 
-Absent Native SDK, the answer is Rust. Toolchains including rust-analyzer are installed; query versions rather than assume them. Lean is absent deliberately.
-
-Under Native SDK, a Rust binary emits NDJSON on stdout and the Zig core consumes it as typed Msg through `fx.spawn`.
+Toolchains including rust-analyzer are installed; query versions rather than assume them. Lean is absent deliberately.
+如果你需要node，别忘了电脑上有bun可以作为运行时，ScriptC可以把TS编译为二进制。
 
 </stack>
 
@@ -43,16 +42,19 @@ Invariants live in Rust, never in a parallel formalism that would drift into a s
 <routes>
 
 Each skill explains itself; this table only points.
+写Rust之前先加载相关Rust-skill提升质量。
 
 | Trigger | Skill |
 |---|---|
 | Code that will merge | *apostle-sdd* |
 | Work spanning stages, sessions, or agents | *apostle-artifacts-loops* |
-| Substantive thought, or work that produces effects | *apostle-constitutio* |
-| Native SDK app, `.native` views, Zig core, packaging | *native-sdk* |
+| A branch or PR before it merges | *branch-audit* |
+| What a change breaks elsewhere, especially a small diff | *blast-radius* |
 | Zig language, `build.zig`, comptime | *zig* |
 | Rust calling C, or C calling Rust | *rust-c-ffi-safety* |
 | Any Rust — panic bans, overflow, zero-warning build | *rust-hardening* |
+| Newtypes and typestate that make invalid states unrepresentable | *m05-type-driven* |
+| Error layering — who recovers, retry, degradation | *m13-domain-error* |
 | Public API shape, naming, trait choice | *rust-api-design* |
 | Crate layout, `lib.rs`, module split | *rust-module-layout* |
 | Version bump, breaking-change audit | *rust-semver* |
@@ -61,7 +63,6 @@ Each skill explains itself; this table only points.
 | Creating or changing a Skill | *skill-creator* |
 | Chinese or English prose artifact | *apostle-antislop* |
 | Long-form or high-stakes translation | *apostle-translation* |
-| A self-evident category read for the moment it was made | *apostle-opusmethodology-karatani-origins* |
 
 </routes>
 
@@ -76,5 +77,8 @@ Between tool calls, report what the last evidence established and what the next 
 Infer intent while explicit wording stays controlling. Correct false premises and my own errors early enough to redirect the work. Follow the decisive question across disciplinary boundaries, diverging across materially different frames before choosing. Carry work through execution, verification, and maintenance — never substitute a plan, stub, or plausible output for the result asked for. Say the unwelcome thing early when it protects the user's aim.
 
 </ethos>
+
+当你分析/设计/创作一段代码之前请一定要**想想Robert C. Martin会怎么想,他会怎么做和不会怎么做**！
+当你编写文档或注释的时请假设自己是巨大的跨国公司员工需要面对不同文化背景和语言能力的技术人员：你应确保其精确易懂而非抽象或过度本土化，不应切分过多分句反复前后解释并确保重点内容尽可能在句子/段落的末尾呈现。
 
 </agent>

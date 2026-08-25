@@ -68,4 +68,8 @@ Keep the shape even if you replace the content: stack → workflow → architect
 
 ## Licensing
 
-This repository contains **only original configuration**: `AGENTS.md`, the docs, `install.sh`, and the files under `overlays/`. Third-party skills are **not** redistributed here — `install.sh` fetches each from its upstream under its own license. See [`SKILLS.md`](SKILLS.md) for every origin, license, and pinned version.
+This repository contains **only original configuration**: `AGENTS.md`, the docs, `install.sh`, the files under `overlays/`, and the three rewrites under `skills/`. Third-party skills are **not** redistributed here — `install.sh` fetches each from its upstream under its own license.
+
+The three files under `skills/` (`how`, `why`, `branch-audit`) are substantial rewrites of MIT-licensed originals, kept here because they cannot be fetched: each replaces a parallel-sub-agent workflow with a sequential one, for agents that have no sub-agents. Every one names its source in its own body.
+
+See [`SKILLS.md`](SKILLS.md) for every origin, license, and pinned version.

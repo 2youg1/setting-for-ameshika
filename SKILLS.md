@@ -15,6 +15,26 @@ repository; only `AGENTS.md`, the docs, the script, and `overlays/` are original
 | `rust-api-design` | `full-stack-skills/rust-skills` | Apache-2.0 | Rust 1.97.1 | `rustc -V` major change |
 | `rust-semver` | `full-stack-skills/rust-skills` | Apache-2.0 | Rust 1.97.1 | `rustc -V` major change |
 | `rust-module-layout` | `full-stack-skills/rust-skills` | Apache-2.0 | Rust 1.97.1 | `rustc -V` major change |
+| `rust-workspace` | `full-stack-skills/rust-skills` | Apache-2.0 | Rust 1.97.1 | `rustc -V` major change |
+| `rust-cargo-build` | `full-stack-skills/rust-skills` | Apache-2.0 | Rust 1.97.1 | `rustc -V` major change |
+| `rust-documentation` | `full-stack-skills/rust-skills` | Apache-2.0 | Rust 1.97.1 | `rustc -V` major change |
+| `m05-type-driven` | `actionbook/rust-skills` | MIT | — | annually |
+| `m13-domain-error` | `actionbook/rust-skills` | MIT | — | annually |
+| `m15-anti-pattern` | `actionbook/rust-skills` | MIT | — | annually |
+| `domain-embedded` | `actionbook/rust-skills` | MIT | — | annually |
+| `blast-radius` | `cursor/plugins` (pstack) | MIT | — | when pstack ships a new review skill |
+
+## Rewritten in this repository
+
+Under `skills/`. These are derivative works of MIT-licensed originals, reworked because the
+originals orchestrate parallel sub-agents and this configuration targets agents that have none.
+Each one names its source in its own body; re-read the upstream when it changes materially.
+
+| Skill | Derived from | License | What changed |
+|---|---|---|---|
+| `how` | pstack `how` (`cursor/plugins`) | MIT | Parallel explorer and critic sub-agents become sequential passes that must write findings down between angles. Critique mode states plainly that one model applying several lenses is not several models disagreeing |
+| `why` | pstack `why` (`cursor/plugins`) | MIT | The seven MCP-backed investigators become one ordered sweep over whatever tools the environment actually exposes. The epistemics framework and the coverage-map output are unchanged, because they are the part that carries the value |
+| `branch-audit` | Thermos `thermo-nuclear-review` + `thermo-nuclear-code-quality-review` (`cursor/plugins`) | MIT | Two parallel review sub-agents become two sequential passes in one context, with a rule that pass one's findings are written down before pass two's rubric is read — a correctness verdict carried forward suppresses the maintainability findings that pass exists to produce |
 
 **A stale skill is worse than no skill** — it makes the agent confidently emit APIs that were
 removed. Freshness beats popularity when picking between candidates.
@@ -41,7 +61,8 @@ Set up separately if you want them.
 
 | Set | Origin | Notes |
 |---|---|---|
-| Rust meta-cognition | `actionbook/rust-skills` | `m0x-*` ownership/borrow/lifetime routing, `domain-*`, `coding-guidelines`, `unsafe-checker`. Large and good; overlaps some entries above |
+| Rust meta-cognition (the rest) | `actionbook/rust-skills` | The other 34: `m01`–`m04`, `m06`, `m07`, `m09`–`m12`, `m14`, the remaining `domain-*`, `coding-guidelines`, `unsafe-checker`. Four are fetched above; installing all 38 floods the always-resident description budget, and `m01`–`m07` overlap `rust-hardening` |
+| pstack (the rest) | `cursor/plugins` → `pstack` | 23 skills plus 21 one-principle skills. `arena`, `swarm`, `interrogate`, `no-comments`, `reflect` and `poteto-mode` require parallel sub-agents and will not run without them; `unslop` and `technical-writing` overlap this configuration's prose and delivery rules |
 | Engineering workflow | `mattpocock/skills` | `code-review`, `research`, `diagnosing-bugs`, `writing-for-agents`, plus command-only `to-spec`, `triage`, `wayfinder`, `handoff` |
 | Office documents | `anthropics/skills` | `pdf`, `docx`, `xlsx`, `pptx`. ~4 MB; skip unless you produce those formats |
 
@@ -54,6 +75,9 @@ Recorded so the evaluation is not repeated.
 | `full-stack-skills/rust-skills` → `rust-testing` | Description claims `property, fuzz`; body states `Out of Scope: proptest → Not currently covered`. A description that overclaims mis-triggers. Use `rust-coverage-meaningful-tests` |
 | `ytakano/rust_skills` → `trace-state-machine-port-conformance` | Triggers only on **C++ → Rust ports**; it would never fire on a greenfield Rust project |
 | `zigcc/skills` | Three months stale against a fast-moving language, despite a higher star count |
+| Thermos `thermos` orchestrator | Its only job is launching the two review sub-agents in parallel and merging their reports. With no sub-agents there is nothing left to orchestrate; the two rubrics are merged into `branch-audit` instead |
+| `full-stack-skills/rust-skills` → `rust-style-clippy` | `rust-hardening` already owns the zero-warning build and the `#[expect(reason=…)]` allowlist, and `AGENTS.md` fixes the gate command. A second skill proposing lint configuration would be a second authority for one rule |
+| `full-stack-skills/rust-skills` → `rust-stable` | The language-semantics entry skill, pinned to one compiler release. Version-pinned language content goes stale silently, and the model already knows ownership and traits |
 | `leanprover/skills` | Six of nine skills are for contributing to Lean/Mathlib itself. Lean is deliberately absent from this stack — invariants stay in Rust, since a Lean model has no automated correspondence to Rust code and becomes a second, drifting authority. Use `kani` when a property genuinely needs proof |
 
 ## Measuring the budget
