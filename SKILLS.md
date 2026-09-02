@@ -7,7 +7,7 @@ repository; only `AGENTS.md`, the docs, the script, and `overlays/` are original
 
 | Skill | Upstream | License | Pinned to | Re-check when |
 |---|---|---|---|---|
-| `native-sdk` | `vercel-labs/native`, via npm `@native-sdk/cli` | Apache-2.0 | SDK **0.9.0** | upstream is pre-1.0 — check npm before each milestone |
+| `native-sdk` | `vercel-labs/native`, via npm `@native-sdk/cli` | Apache-2.0 | SDK **0.10.1** | upstream is pre-1.0 — check npm before each milestone |
 | `zig` | `nzrsky/zig-skills` | MIT | **Zig 0.16.0** | `zig version` changes |
 | `rust-c-ffi-safety` | `ytakano/rust_skills` | — | — | annually |
 | `rust-coverage-meaningful-tests` | `ytakano/rust_skills` | — | — | annually |
@@ -53,7 +53,11 @@ Under `overlays/`. Re-apply these after any re-fetch; `install.sh` does it autom
   and `native skills get <name>` at runtime. The overlay replaces it with a local router, and
   `install.sh` extracts the twelve upstream bodies into `references/`, so nothing is fetched at
   use time. The TypeScript authoring path is retained but explicitly disabled: this
-  configuration builds Zig cores (`native init --template zig-core`).
+  configuration builds Zig cores (`native init --template zig-core`). The router also carries the
+  line anchors of the seven Zig sections inside `native-ui.md`; upstream edits move them, so
+  re-check those numbers on every re-pin. SDK 0.10 renamed the manifest `native init` writes from
+  `app.zon` to `app.json` while keeping ZON supported, and most upstream prose still shows ZON —
+  the overlay states that split so a scaffolded app is not edited at the wrong filename.
 
 ## Recommended, not fetched
 

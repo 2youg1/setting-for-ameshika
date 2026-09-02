@@ -1,12 +1,12 @@
 ---
 name: native-sdk
-description: Native SDK (vercel-labs/native) desktop app development, Zig-core path. Apps are declarative .native markup views plus a Model/Msg/update core, compiled to a single native binary with no WebView, browser, or JS runtime. Use when scaffolding or modifying a Native SDK app, writing .native views, wiring a Zig core, calling a Rust binary from update via the effects channel, configuring app.zon, packaging, or driving the built-in automation server. Reference bodies are local; the native CLI is optional.
+description: Native SDK (vercel-labs/native) desktop app development, Zig-core path. Apps are declarative .native markup views plus a Model/Msg/update core, compiled to a single native binary with no WebView, browser, or JS runtime. Use when scaffolding or modifying a Native SDK app, writing .native views, wiring a Zig core, calling a Rust binary from update via the effects channel, configuring app.json or app.zon, packaging, or driving the built-in automation server. Reference bodies are local; the native CLI is optional.
 license: Apache-2.0
 ---
 
 # Native SDK — Zig core + Rust workers
 
-Vendored from `vercel-labs/native` (`@native-sdk/cli` 0.9.0, `skill-data/`). Bodies live in `references/` — **no `native skills get` call is needed**. Load only the file the task requires; the full set is ~440 KB.
+Vendored from `vercel-labs/native` (`@native-sdk/cli` 0.10.1, `skill-data/`). Bodies live in `references/` — **no `native skills get` call is needed**. Load only the file the task requires; the full set is ~470 KB.
 
 <stack>
 
@@ -18,9 +18,9 @@ This library targets **Zig cores, not TypeScript cores.** Upstream defaults to `
 native init my_app --template zig-core   # produces src/main.zig, not src/core.ts
 ```
 
-Three files of truth: `app.zon` (manifest), `src/app.native` (view), `src/main.zig` (core). Markup binds and dispatches but never mutates; all state change happens in one `update`.
+Three files of truth: `app.json` (manifest), `src/app.native` (view), `src/main.zig` (core); the scaffold adds `src/tests.zig`. SDK 0.10 made `app.json` what `native init` writes, and `app.zon` remains supported — most reference prose below still shows the ZON syntax, so read a `.zon` example as the field list and write those fields as JSON in a new app. Markup binds and dispatches but never mutates; all state change happens in one `update`.
 
-**Heavy logic belongs in Rust, not Zig.** The Zig core stays a thin state machine; domain work runs as a Rust binary reached through the effects channel (`fx.spawn`), which streams stdout back as typed Msgs and delivers exit as one more Msg. Have the Rust side emit NDJSON on stdout and keep the process key in the model so `fx.cancel` works. See `references/native-ui.md` §"Effects in Zig cores" (~line 570) — this is the seam that keeps Rust as the project core.
+**Heavy logic belongs in Rust, not Zig.** The Zig core stays a thin state machine; domain work runs as a Rust binary reached through the effects channel (`fx.spawn`), which streams stdout back as typed Msgs and delivers exit as one more Msg. Have the Rust side emit NDJSON on stdout and keep the process key in the model so `fx.cancel` works. Files exchanged with that worker travel the same channel (`fx.readFile`/`writeFile`/`appendFile`/`statFile`/`deleteFile`, streamed above 1 MiB); paths outside the app's own data/config/cache/state/logs/temp roots require the `filesystem` permission. See `references/native-ui.md` §"Effects in Zig cores" (~line 572) — this is the seam that keeps Rust as the project core.
 
 </stack>
 
@@ -30,9 +30,9 @@ Three files of truth: `app.zon` (manifest), `src/app.native` (view), `src/main.z
 
 | Task | File |
 |---|---|
-| What is the Native SDK, project layout, `app.zon`, first orientation | `references/core.md` |
+| What is the Native SDK, project layout, the app manifest, first orientation | `references/core.md` |
 | Writing `.native` views, widgets, layout, bindings, messages | `references/native-ui.md` |
-| Zig core wiring, effects/subprocess, windows, time, testing | `references/native-ui.md` — Zig sections at ~49, 349, 570, 875, 934, 973, 1215 |
+| Zig core wiring, effects/subprocess, windows, time, testing | `references/native-ui.md` — Zig sections at ~49, 349, 572, 883, 943, 1003, 1245 |
 | `zig build` fails on std APIs (0.15-era code) | `references/zig-0.16-idioms.md` |
 | Testing a running app, snapshots, screenshots, driving widgets | `references/automation.md` |
 | Directory and file conventions | `references/core-project-anatomy.md` |
@@ -49,7 +49,7 @@ Read `references/core.md` before explaining or changing an app. For view work lo
 
 ## TypeScript files, kept but unused
 
-`references/ts-core.md`, `ts-services.md`, and `ts-service-surface.md` are the upstream TypeScript authoring path (~208 KB). They are retained only to read upstream examples that ship as TypeScript. **Do not propose the TypeScript core path or write `src/core.ts` for this user.** When an upstream recipe appears only in TypeScript, translate its Model/Msg/update shape into the Zig `UiApp` form rather than adopting the TS core.
+`references/ts-core.md`, `ts-services.md`, and `ts-service-surface.md` are the upstream TypeScript authoring path (~215 KB). They are retained only to read upstream examples that ship as TypeScript. **Do not propose the TypeScript core path or write `src/core.ts` for this user.** When an upstream recipe appears only in TypeScript, translate its Model/Msg/update shape into the Zig `UiApp` form rather than adopting the TS core.
 
 </typescript-path>
 

@@ -9,7 +9,7 @@ HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT
 
-NATIVE_SDK_VERSION="0.9.0"
+NATIVE_SDK_VERSION="0.10.1"
 
 for bin in curl tar awk sed; do
   command -v "$bin" >/dev/null || { echo "missing dependency: $bin" >&2; exit 1; }
