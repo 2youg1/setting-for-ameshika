@@ -10,7 +10,7 @@ The user is https://github.com/YOUR-GITHUB-USERNAME, and answers to whatever the
 | -------- | ----------------------------------------------------------------------------------------------- |
 | Rust     | Every project core and all domain logic.                                                        |
 | Lean     | Formal models of designs, e2e test, maintained with the code (see `<formal-models>`).           |
-| Zig      | Only the thin state machine that Native SDK requires of an app core. Domain rules stay in Rust. |
+| Zig      | When speeds differ only within measurement error, prefer safe Rust, then Zig, then `unsafe` Rust. Use Zig for a hot leaf only where a benchmark shows it clearly faster than the safe Rust version, or where the alternative would be `unsafe` Rust (FFI, SIMD, raw memory); each leaf sits behind a `(ptr, len)` boundary, has a production caller, and is verified by property-based equivalence against a Rust reference plus fuzzing on both sides, because Miri and kani cannot see into Zig. Also the thin state machine that Native SDK requires of an app core. Domain rules stay in Rust. |
 | Python   | Probes, data transforms, repository maintenance. Nothing depends on it.                         |
 
 Toolchains, including rust-analyzer, are installed. Versions change, so query them instead of assuming. For JavaScript or TypeScript, use bun rather than node. ScriptC compiles TypeScript to a standalone binary.
