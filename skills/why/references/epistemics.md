@@ -1,5 +1,7 @@
 # Epistemics
 
+> **Source and acknowledgment.** Adapted from `epistemics.md` under `pstack/skills/why/references` in [cursor/plugins](https://github.com/cursor/plugins) — pstack, the skill collection by Lauren Tan (poteto), released under the MIT licence. The five confidence tiers and the calibration check are the upstream's; the wording here is adapted to this environment. Modified and adapted by 2youg1, 2026. Acknowledgment and thanks to the upstream and its author.
+
 How to reason about confidence when evidence is historical, fragmentary, and sometimes contradictory, and how to communicate it without flattening it into false certainty.
 
 Code doesn't carry its own motivation. You can read what code does; you can't read *why it exists*. That lives in commits, PRs, tickets, docs, and conversations, all incomplete, biased, and sometimes missing entirely. Pretending otherwise produces confident-sounding guesses that mislead the user.

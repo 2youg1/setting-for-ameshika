@@ -9,7 +9,7 @@ Investigate motivation and intent. Why was it built this way, what edge cases we
 
 Companion to `how`. `how` answers what the code does. `why` answers what forces led to its shape.
 
-> Adapted from pstack (`cursor/plugins`, MIT). The original fans out one subagent per MCP-backed evidence category. pi has neither sub-agents nor built-in MCP, so the sweep below runs sequentially over whatever tools this environment actually has. The epistemics framework is unchanged and is the part that matters.
+> Adapted from pstack — `pstack/skills/why` in [cursor/plugins](https://github.com/cursor/plugins), the skill collection by Lauren Tan (poteto), released under the MIT licence. Modified and adapted by 2youg1, 2026. Acknowledgment and thanks to the upstream and its author. The original fans out one subagent per MCP-backed evidence category. pi has neither sub-agents nor built-in MCP, so the sweep below runs sequentially over whatever tools this environment actually has. The epistemics framework is unchanged and is the part that matters.
 
 ## Why this is hard
 

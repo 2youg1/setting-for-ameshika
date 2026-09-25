@@ -72,9 +72,9 @@ say "zig" "$(ls "$DEST/zig/references" | wc -l) reference files (0.16 guard appl
 echo
 
 # ------------------------------------------------------------------- ytakano
-echo "ytakano/rust_skills  (soundness, hardening, meaningful tests)"
+echo "ytakano/rust_skills  (hardening, meaningful tests)"
 SRC="$(fetch_tarball ytakano/rust_skills)/skills"
-for s in rust-c-ffi-safety rust-coverage-meaningful-tests rust-hardening; do
+for s in rust-coverage-meaningful-tests rust-hardening; do
   copy_skill "$SRC/$s" "$s"; say "$s" "ok"
 done
 echo
@@ -105,10 +105,11 @@ copy_skill "$SRC/blast-radius" blast-radius; say "blast-radius" "ok"
 echo
 
 # ------------------------------------------------------- rewrites in this repo
-# how, why and branch-audit are original rewrites of MIT-licensed pstack and Thermos skills,
-# reworked for agents without sub-agents. They are not fetchable, so they live here.
-echo "rewrites (this repository, MIT-derived — see SKILLS.md for attribution)"
-for s in how why branch-audit; do
+# how and why are original rewrites of MIT-licensed pstack skills, reworked for agents without
+# sub-agents; authority-review adapts the Thermos plugin's two review rubrics and deepens them
+# with this configuration's own authority lens. None is fetchable, so all three live here.
+echo "kept here (this repository — see SKILLS.md for attribution)"
+for s in how why authority-review; do
   rm -rf "${DEST:?}/$s"; cp -r "$HERE/skills/$s" "$DEST/$s"; say "$s" "ok"
 done
 echo
@@ -120,18 +121,45 @@ echo
 echo "repairing cross-references"
 
 # --- full-stack-skills: retarget to the local owner of each concern
-for f in $(grep -rlE 'rust-(style-clippy|unsafe-ffi|testing|embedded|performance|dependencies|code-review)' \
+for f in $(grep -rlE 'rust-(style-clippy|testing|embedded|performance|dependencies|code-review)' \
            --include='*.md' "$DEST"/rust-{api-design,semver,module-layout,workspace,cargo-build,documentation} 2>/dev/null); do
   sed -i \
     -e 's/rust-style-clippy/rust-hardening/g' \
     -e 's/rust-dependencies/rust-hardening/g' \
-    -e 's/rust-unsafe-ffi/rust-c-ffi-safety/g' \
     -e 's/rust-testing/rust-coverage-meaningful-tests/g' \
     -e 's/rust-embedded/domain-embedded/g' \
     -e 's/rust-performance/diagnosing-bugs/g' \
-    -e 's/rust-code-review/branch-audit/g' \
+    -e 's/rust-code-review/authority-review/g' \
     "$f"
 done
+
+# --- ytakano and full-stack-skills: rust-c-ffi-safety is not installed, so every pointer to it
+# becomes the concern in plain language. Nothing here owns FFI soundness as a separate skill.
+python3 - "$DEST" <<'PY'
+import pathlib, sys
+dest = pathlib.Path(sys.argv[1])
+edits = {
+    "rust-hardening/SKILL.md": [
+        ("follow the **rust-c-ffi-safety** skill", "follow the FFI soundness rules"),
+    ],
+    "rust-api-design/SKILL.md": [
+        ("If you reach for `transmute`, route to `rust-unsafe-ffi`.",
+         "If you reach for `transmute`, treat it as a soundness review of the FFI and unsafe boundary."),
+    ],
+    "rust-module-layout/SKILL.md": [
+        ("3. Visibility of `unsafe` blocks \u2192 use `rust-unsafe-ffi`",
+         "3. Visibility of `unsafe` blocks \u2014 out of scope here; apply the FFI soundness rules directly"),
+    ],
+}
+for rel, pairs in edits.items():
+    p = dest / rel
+    t = p.read_text(encoding="utf-8")
+    for old, new in pairs:
+        if old not in t:
+            sys.exit("FFI pointer demotion: %r not found in %s" % (old, rel))
+        t = t.replace(old, new)
+    p.write_text(t, encoding="utf-8")
+PY
 
 # --- full-stack-skills: rust-stable and rust-macros have no local owner, so drop the pointer
 sed -i \
@@ -232,7 +260,7 @@ p = pathlib.Path(sys.argv[1]); t = p.read_text(encoding="utf-8")
 t = t.replace("disable-model-invocation: true\n", "")
 t = t.replace("Blast radius tells you what it breaks somewhere else.",
     "Blast radius tells you what it breaks somewhere else. For a full pre-merge audit of the diff "
-    "itself rather than its reach, use `branch-audit`.\n\n"
+    "itself rather than its reach, use `authority-review`.\n\n"
     "> Adapted from pstack (`cursor/plugins`, MIT), with the parallel-model step rewritten for "
     "agents that have no sub-agents.", 1)
 t = t.replace(
@@ -284,11 +312,13 @@ if [ -n "$dead" ]; then echo "DEAD CROSS-REFERENCES:$dead" >&2; fail=1; fi
 
 tot=0; n=0
 for d in "$DEST"/*/; do
-  d="${d%/}"; [ -f "$d/SKILL.md" ] || continue
-  grep -qi '^disable-model-invocation: *true' "$d/SKILL.md" && continue
-  c=$(awk '/^---/{x++} x==1' "$d/SKILL.md" | grep -A25 '^description:' \
+  # ${#name}, not ${#d}: the always-resident cost is the directory name, and $d is a full path here.
+  name="${d%/}"; name="${name##*/}"
+  [ -f "$DEST/$name/SKILL.md" ] || continue
+  grep -qi '^disable-model-invocation: *true' "$DEST/$name/SKILL.md" && continue
+  c=$(awk '/^---/{x++} x==1' "$DEST/$name/SKILL.md" | grep -A25 '^description:' \
       | awk '/^[a-z-]+:/ && !/^description:/{exit} {print}' | wc -c)
-  tot=$((tot+c+${#d}+95)); n=$((n+1))
+  tot=$((tot+c+${#name}+95)); n=$((n+1))
 done
 echo "$n auto-loaded skills ≈ $((tot/4)) tokens of always-resident context."
 echo
