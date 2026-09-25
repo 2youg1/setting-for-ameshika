@@ -9,7 +9,6 @@ repository; only `AGENTS.md`, the docs, the script, and `overlays/` are original
 |---|---|---|---|---|
 | `native-sdk` | `vercel-labs/native`, via npm `@native-sdk/cli` | Apache-2.0 | SDK **0.10.1** | upstream is pre-1.0 — check npm before each milestone |
 | `zig` | `nzrsky/zig-skills` | MIT | **Zig 0.16.0** | `zig version` changes |
-| `rust-c-ffi-safety` | `ytakano/rust_skills` | — | — | annually |
 | `rust-coverage-meaningful-tests` | `ytakano/rust_skills` | — | — | annually |
 | `rust-hardening` | `ytakano/rust_skills` | — | — | annually |
 | `rust-api-design` | `full-stack-skills/rust-skills` | Apache-2.0 | Rust 1.97.1 | `rustc -V` major change |
@@ -24,17 +23,19 @@ repository; only `AGENTS.md`, the docs, the script, and `overlays/` are original
 | `domain-embedded` | `actionbook/rust-skills` | MIT | — | annually |
 | `blast-radius` | `cursor/plugins` (pstack) | MIT | — | when pstack ships a new review skill |
 
-## Rewritten in this repository
+## Kept in this repository
 
-Under `skills/`. These are derivative works of MIT-licensed originals, reworked because the
-originals orchestrate parallel sub-agents and this configuration targets agents that have none.
-Each one names its source in its own body; re-read the upstream when it changes materially.
+Under `skills/`. Two are derivative works of MIT-licensed pstack originals, reworked because the
+originals orchestrate parallel sub-agents and this configuration targets agents that have none;
+the third adapts the Thermos plugin's two review rubrics the same way and then deepens them with
+this configuration's own authority lens. Each one names its source in its own body; re-read the
+upstream when it changes materially.
 
 | Skill | Derived from | License | What changed |
 |---|---|---|---|
-| `how` | pstack `how` (`cursor/plugins`) | MIT | Parallel explorer and critic sub-agents become sequential passes that must write findings down between angles. Critique mode states plainly that one model applying several lenses is not several models disagreeing |
-| `why` | pstack `why` (`cursor/plugins`) | MIT | The seven MCP-backed investigators become one ordered sweep over whatever tools the environment actually exposes. The epistemics framework and the coverage-map output are unchanged, because they are the part that carries the value |
-| `branch-audit` | Thermos `thermo-nuclear-review` + `thermo-nuclear-code-quality-review` (`cursor/plugins`) | MIT | Two parallel review sub-agents become two sequential passes in one context, with a rule that pass one's findings are written down before pass two's rubric is read — a correctness verdict carried forward suppresses the maintainability findings that pass exists to produce |
+| `how` | pstack `how` (`cursor/plugins`) | MIT | Parallel explorer and critic sub-agents become sequential passes that must write findings down between angles. Critique mode states plainly that one model applying several lenses is not several models disagreeing. Every file also carries the upstream repository, author, and modification credit |
+| `why` | pstack `why` (`cursor/plugins`) | MIT | The seven MCP-backed investigators become one ordered sweep over whatever tools the environment actually exposes. The epistemics framework and the coverage-map output are unchanged, because they are the part that carries the value. Every file also carries the upstream repository, author, and modification credit |
+| `authority-review` | Thermos `thermo-nuclear-review` + `thermo-nuclear-code-quality-review` (`cursor/plugins`), deepened with this configuration's own authority lens | MIT | Two parallel review sub-agents become two sequential passes in one context, with a rule that pass one's findings are written down before pass two's rubric is read — a correctness verdict carried forward suppresses the maintainability findings that pass exists to produce. Pass two is then recut: the maintainability rubric becomes one lens over the whole diff, a fact with more than one authoritative definition, ranked by how close the copies are to disagreeing, with the six shapes that carry most findings and a requirement to name the definition that survives |
 
 **A stale skill is worse than no skill** — it makes the agent confidently emit APIs that were
 removed. Freshness beats popularity when picking between candidates.
@@ -67,7 +68,7 @@ Set up separately if you want them.
 |---|---|---|
 | Rust meta-cognition (the rest) | `actionbook/rust-skills` | The other 34: `m01`–`m04`, `m06`, `m07`, `m09`–`m12`, `m14`, the remaining `domain-*`, `coding-guidelines`, `unsafe-checker`. Four are fetched above; installing all 38 floods the always-resident description budget, and `m01`–`m07` overlap `rust-hardening` |
 | pstack (the rest) | `cursor/plugins` → `pstack` | 23 skills plus 21 one-principle skills. `arena`, `swarm`, `interrogate`, `no-comments`, `reflect` and `poteto-mode` require parallel sub-agents and will not run without them; `unslop` and `technical-writing` overlap this configuration's prose and delivery rules |
-| Engineering workflow | `mattpocock/skills` | `code-review`, `research`, `diagnosing-bugs`, `writing-for-agents`, plus command-only `to-spec`, `triage`, `wayfinder`, `handoff` |
+| Engineering workflow | `mattpocock/skills` | `research`, `diagnosing-bugs`, `writing-for-agents`, plus command-only `to-spec`, `triage`, `wayfinder`, `handoff` |
 | Office documents | `anthropics/skills` | `pdf`, `docx`, `xlsx`, `pptx`. ~4 MB; skip unless you produce those formats |
 
 ## Evaluated and rejected
@@ -76,10 +77,12 @@ Recorded so the evaluation is not repeated.
 
 | Candidate | Why not |
 |---|---|
+| A two-axis diff review that separates a standards axis from a spec axis | Its ideas live inside `authority-review` now: the two passes stay separate, pass one carries divergence-from-the-record, and pass two is recut as the authority lens. Installing it as well would be two authorities for how a diff gets reviewed |
+| `ytakano/rust_skills` → `rust-c-ffi-safety` | Was installed until `AGENTS.md` stopped routing to it. An unrouted skill still pays its description in every session, and the FFI soundness rules are short enough to apply directly; `install.sh` demotes its four inbound pointers to plain language |
 | `full-stack-skills/rust-skills` → `rust-testing` | Description claims `property, fuzz`; body states `Out of Scope: proptest → Not currently covered`. A description that overclaims mis-triggers. Use `rust-coverage-meaningful-tests` |
 | `ytakano/rust_skills` → `trace-state-machine-port-conformance` | Triggers only on **C++ → Rust ports**; it would never fire on a greenfield Rust project |
 | `zigcc/skills` | Three months stale against a fast-moving language, despite a higher star count |
-| Thermos `thermos` orchestrator | Its only job is launching the two review sub-agents in parallel and merging their reports. With no sub-agents there is nothing left to orchestrate; the two rubrics are merged into `branch-audit` instead |
+| Thermos `thermos` orchestrator | Its only job is launching the two review sub-agents in parallel and merging their reports. With no sub-agents there is nothing left to orchestrate; the two rubrics are merged into `authority-review` instead |
 | `full-stack-skills/rust-skills` → `rust-style-clippy` | `rust-hardening` already owns the zero-warning build and the `#[expect(reason=…)]` allowlist, and `AGENTS.md` fixes the gate command. A second skill proposing lint configuration would be a second authority for one rule |
 | `full-stack-skills/rust-skills` → `rust-stable` | The language-semantics entry skill, pinned to one compiler release. Version-pinned language content goes stale silently, and the model already knows ownership and traits |
 | `leanprover/skills` | Six of nine skills are for contributing to Lean/Mathlib itself. Lean is deliberately absent from this stack — invariants stay in Rust, since a Lean model has no automated correspondence to Rust code and becomes a second, drifting authority. Use `kani` when a property genuinely needs proof |

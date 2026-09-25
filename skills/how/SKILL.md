@@ -9,7 +9,7 @@ Answer "how does X work?" by reading the code, then explaining it at the level a
 
 Companion skills: `why` explains what forces shaped the code, `blast-radius` explains what a change to it would break.
 
-> Adapted from pstack (`cursor/plugins`, MIT). The original fans work out to parallel explorer and critic subagents. pi has no sub-agents, so the passes below run sequentially in one context. The cost is real and stated in "Honest limits" at the end.
+> Adapted from pstack — `pstack/skills/how` in [cursor/plugins](https://github.com/cursor/plugins), the skill collection by Lauren Tan (poteto), released under the MIT licence. Modified and adapted by 2youg1, 2026. Acknowledgment and thanks to the upstream and its author. The original fans work out to parallel explorer and critic subagents. pi has no sub-agents, so the passes below run sequentially in one context. The cost is real and stated in "Honest limits" at the end.
 
 ## Two modes
 

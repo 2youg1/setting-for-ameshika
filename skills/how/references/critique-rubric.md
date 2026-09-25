@@ -1,5 +1,7 @@
 # Architectural Critique Rubric
 
+> **Source and acknowledgment.** This rubric is part of the local adaptation of pstack's `how` skill - `pstack/skills/how` in [cursor/plugins](https://github.com/cursor/plugins), the skill collection by Lauren Tan (poteto), released under the MIT licence. Upstream `how` ships no rubric of its own: its adversarial signal is several critics in parallel, and its `principle-*` skills - `principle-boundary-discipline` among them - hold the review criteria this file folds into the lenses one sequential reviewer walks. Modified and adapted by 2youg1, 2026. Acknowledgment and thanks to the upstream and its author.
+
 Review through whichever of these lenses are relevant. Not every lens applies to every subsystem.
 
 ## Abstraction Fit
