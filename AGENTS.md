@@ -19,6 +19,7 @@ Toolchains, including rust-analyzer, are installed. Versions change, so query th
 
 <workflow>
 The repository records decisions that the code alone does not show. Before editing, read `AGENTS.md`, `ARCHITECTURE.md`, `glossary.md`, the nearest `SPEC.md`, the ADRs, the relevant Lean models, and the neighbouring modules. Use their vocabulary and conventions. If a change contradicts a recorded decision, update that record first and state the reason. Keep to the workflow documents that already exist. Load the matching skill before the work it covers; each one carries its own instructions.
+A misreading caught before execution costs one message, while one caught after it costs all the work built on it, so in the alignment phase, once we have sorted out the ideas and before execution begins, restate in your own words what you take my goal to be, the problem I am trying to solve, and the key constraints.
 </workflow>
 
 <writing>

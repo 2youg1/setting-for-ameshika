@@ -10,7 +10,7 @@ Every line of `AGENTS.md` and every skill *description* is loaded into **every**
 
 | Artifact | Budget | Why |
 |---|---|---|
-| `AGENTS.md` | **~3.7k tokens, 158 lines** | Always resident, so every line is paid in every session. Policy lives here; procedure lives in a skill body |
+| `AGENTS.md` | **~3.8k tokens, 159 lines** | Always resident, so every line is paid in every session. Policy lives here; procedure lives in a skill body |
 | Skill descriptions | **~2.9k tokens total** | Only the description is always-resident; bodies load on demand |
 
 Three rules follow from that:
